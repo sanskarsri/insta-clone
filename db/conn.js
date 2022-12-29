@@ -1,8 +1,7 @@
 
 const mongoose = require("mongoose");
-const {DB_USERNAME,DB_PASSWORD}=process.env
 
-const DB=`mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@cluster0.c7iws.mongodb.net/instacloneDB?retryWrites=true&w=majority`
+const DB=process.env.DB
 
 mongoose.connect(DB,{useNewUrlParser: true, useUnifiedTopology: true ,useFindAndModify: false }).then(()=>{
     console.log("Database connected successfully")

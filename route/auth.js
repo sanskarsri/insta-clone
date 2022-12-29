@@ -98,13 +98,14 @@ router.post('/reset-password',(req,res)=>{
              user.resetToken = token
              user.expireToken = Date.now() + 3600000 //user should reset within 1 hour
              user.save().then((result)=>{
+                console.log(result,transporter);
                  transporter.sendMail({
                      to:user.email,
-                     from:"ratneshktiwari93@gmail.com",
+                     from:"sanskar0703@gmail.com",
                      subject:"password reset",
                      html:`
                      <h2>You requested for password reset</h2>
-                     <h3>click in this <a href="http://insta-gram-app.herokuapp.com/reset/${token}">link</a> to reset password</h3>
+                     <h3>click in this <a href="http://localhost:3000/reset/${token}">link</a> to reset password</h3>
                      `
                  })
                  res.json({message:"check your email"})

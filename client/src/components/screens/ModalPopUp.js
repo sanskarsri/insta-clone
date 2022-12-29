@@ -1,5 +1,7 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 const ModalPopUp =(props)=>{
+  const [search,setSearch] = useState('');
+  const [userDetails,setuserDetails] = useState(props.userDetails);
     console.log(props.userDetails)
     return (
         <>
@@ -16,7 +18,7 @@ const ModalPopUp =(props)=>{
                             <input type="text"
                             placeholder="Type user email here"
                             value={search}
-                            onChange={(e)=>fetchUsers(e.target.value)}
+                            // onChange={(e)=>fetchUsers(e.target.value)}
                              className="form-control"  aria-describedby="emailHelp" 
                             
                             style={{margin:"15px auto"}}/>
