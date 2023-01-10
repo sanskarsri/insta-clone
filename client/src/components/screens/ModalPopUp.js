@@ -2,7 +2,25 @@ import React,{useState,useEffect} from 'react'
 const ModalPopUp =(props)=>{
   const [search,setSearch] = useState('');
   const [userDetails,setuserDetails] = useState(props.userDetails);
-    console.log(props.userDetails)
+  const fetchUsers = (query)=>{
+    setSearch(query)
+    // console.log(search)
+    if(query!=""){
+        fetch('/api/search-users',{
+          method:"post",
+          headers:{
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify({
+            query
+          })
+        }).then(res=>res.json())
+        .then(results=>{
+          setuserDetails(results.user)
+          console.log(results.user)
+        })}
+ }
+    // console.log(props.userDetails)
     return (
         <>
         <div className="modal fade " id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -18,7 +36,7 @@ const ModalPopUp =(props)=>{
                             <input type="text"
                             placeholder="Type user email here"
                             value={search}
-                            // onChange={(e)=>fetchUsers(e.target.value)}
+                            onChange={(e)=>fetchUsers(e.target.value)}
                              className="form-control"  aria-describedby="emailHelp" 
                             
                             style={{margin:"15px auto"}}/>
