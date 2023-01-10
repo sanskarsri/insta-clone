@@ -28,7 +28,7 @@ const Login =()=>{
         }
         else
         {
-            fetch('/signup',{
+            fetch('/api/signup',{
                 method:"post",
                 headers:{
                     "Content-Type":"application/json"   

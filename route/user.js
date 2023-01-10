@@ -6,7 +6,7 @@ const requireLogin=require("../middleware/requireLogin")
 const Post=mongoose.model("Post")
 const User=mongoose.model("User")
 
-router.get('/profile/:userId',(req,res)=>{
+router.get('/api/profile/:userId',(req,res)=>{
 	User.findOne({_id:req.params.userId})
 	.select("-password")
 	.then(user=>{
@@ -25,7 +25,7 @@ router.get('/profile/:userId',(req,res)=>{
 })
 
 
-router.put('/follow',requireLogin,(req,res)=>{
+router.put('/api/follow',requireLogin,(req,res)=>{
     User.findByIdAndUpdate(req.body.followId,{
         $push:{followers:req.user._id} //pushing id of the user whom current user is following
     },{
@@ -48,7 +48,7 @@ router.put('/follow',requireLogin,(req,res)=>{
         })
 })
 
-router.put('/unfollow',requireLogin,(req,res)=>{
+router.put('/api/unfollow',requireLogin,(req,res)=>{
     User.findByIdAndUpdate(req.body.unFollowId,{
         $pull:{followers:req.user._id} //pushing id of the user whom current user is following
     },{
@@ -72,7 +72,7 @@ router.put('/unfollow',requireLogin,(req,res)=>{
 })
 
 
-router.put('/updateProfilePic',requireLogin,(req,res)=>{
+router.put('/api/updateProfilePic',requireLogin,(req,res)=>{
 	// console.log(req.body)
 	// console.log(req.user)
 	// console.log(5)
@@ -94,7 +94,7 @@ router.put('/updateProfilePic',requireLogin,(req,res)=>{
 })
 
 
-router.post('/search-users',(req,res)=>{
+router.post('/api/search-users',(req,res)=>{
 	console.log(req.body.query)
     let userPattern = new RegExp("^"+req.body.query)
     User.find({email:{$regex:userPattern}})

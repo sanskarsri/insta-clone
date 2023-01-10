@@ -21,7 +21,7 @@ const NewPassword =()=>{
     const postData=()=>{
         const {password}=user
         
-        fetch('/new-password',{
+        fetch('/api/new-password',{
         method:"post",
         headers:{
             "Content-Type":"application/json"   

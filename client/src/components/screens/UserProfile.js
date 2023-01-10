@@ -15,7 +15,7 @@ const Profile =()=>{
     const [url,setUrl]=useState("")
     const {userId}=useParams()
     useEffect(()=>{
-       fetch(`/profile/${userId}`,{
+       fetch(`/api/profile/${userId}`,{
            headers:{
                "Authorization":"Bearer "+localStorage.getItem("jwt")
            }
@@ -30,7 +30,7 @@ const Profile =()=>{
 
     const followUser = () => {
 
-        fetch('/follow', {
+        fetch('/api/follow', {
                 method: "put",
                 headers: {
                     "Content-Type": "application/json",
@@ -65,7 +65,7 @@ const Profile =()=>{
     }
     const unFollowUser = () => {
 
-        fetch('/unfollow', {
+        fetch('/api/unfollow', {
                 method: "put",
                 headers: {
                     "Content-Type": "application/json",
@@ -111,7 +111,7 @@ const Profile =()=>{
 
      useEffect(()=>{
         if(url){
-            fetch('/updateProfilePic',{
+            fetch('/api/updateProfilePic',{
                     method:"put",
                     headers:{
                         "Content-Type":"application/json" ,

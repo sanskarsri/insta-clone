@@ -7,7 +7,7 @@ const Post=mongoose.model("Post")
 
 
 
-router.get('/allpost',requireLogin,(req,res)=>{
+router.get('/api/allpost',requireLogin,(req,res)=>{
     Post.find()
     .populate("postedBy","_id name profilePic")
     .populate("comments.postedBy","_id name profilePic")
@@ -19,7 +19,7 @@ router.get('/allpost',requireLogin,(req,res)=>{
     .catch(err=>{console.log(err)})
 })
 
-router.get('/feed',requireLogin,(req,res)=>{
+router.get('/api/feed',requireLogin,(req,res)=>{
     Post.find({postedBy:{$in:req.user.following}})  // if the postedBy user is in user's following list  
     .populate("postedBy","_id name profilePic")
     .populate("comments.postedBy","_id name profilePic")
@@ -29,7 +29,7 @@ router.get('/feed',requireLogin,(req,res)=>{
     })
     .catch(err=>{console.log(err)})
 })
-router.get('/feed/:userId',requireLogin,(req,res)=>{
+router.get('/api/feed/:userId',requireLogin,(req,res)=>{
     console.log(req.params.userId)
     Post.find({postedBy:req.params.userId})  // if the postedBy user is in user's following list  
     .populate("postedBy","_id name profilePic")
@@ -42,7 +42,7 @@ router.get('/feed/:userId',requireLogin,(req,res)=>{
 })
 
 
-router.get('/mypost',requireLogin,(req,res)=>{
+router.get('/api/mypost',requireLogin,(req,res)=>{
     Post.find({postedBy:req.user._id})
     .populate("postedBy","_id name profilePic")
     .populate("comments.postedBy","_id name profilePic")
@@ -53,7 +53,7 @@ router.get('/mypost',requireLogin,(req,res)=>{
     .catch(err=>{console.log(err)})
 })
 
-router.post('/createpost',requireLogin,(req,res)=>{
+router.post('/api/createpost',requireLogin,(req,res)=>{
     const {title,body,url}=req.body
     if(!title || !body || !url){
         return res.status(422).json({error:"Please add all fields"})
@@ -74,7 +74,7 @@ router.post('/createpost',requireLogin,(req,res)=>{
           
 })
 
-router.put('/like',requireLogin,(req,res)=>{
+router.put('/api/like',requireLogin,(req,res)=>{
     Post.findByIdAndUpdate(req.body.postId,{
         $push:{likes:req.user._id} //pushing id of the user who liked the post
     },{
@@ -90,7 +90,7 @@ router.put('/like',requireLogin,(req,res)=>{
             }
         })
 })
-router.put('/dislike',requireLogin,(req,res)=>{
+router.put('/api/dislike',requireLogin,(req,res)=>{
     Post.findByIdAndUpdate(req.body.postId,{
         $pull:{likes:req.user._id} //pulling id of the user who disliked the post
     },{
@@ -107,7 +107,7 @@ router.put('/dislike',requireLogin,(req,res)=>{
         })
 })
 
-router.put('/comment',requireLogin,(req,res)=>{
+router.put('/api/comment',requireLogin,(req,res)=>{
     const comment = {
         text:req.body.text,
         postedBy:req.user._id,
@@ -129,7 +129,7 @@ router.put('/comment',requireLogin,(req,res)=>{
     })
 })
 
-router.delete('/deletepost/:postId',requireLogin,(req,res)=>{
+router.delete('/api/deletepost/:postId',requireLogin,(req,res)=>{
 
     Post.findById(req.params.postId)
     .populate("postedBy","_id")
@@ -148,7 +148,7 @@ router.delete('/deletepost/:postId',requireLogin,(req,res)=>{
         }
     })
 })
-router.delete('/deletecomment/:postId/:commentId',(req,res)=>{
+router.delete('/api/deletecomment/:postId/:commentId',(req,res)=>{
     const comment={
         _id:req.params.commentId
     }

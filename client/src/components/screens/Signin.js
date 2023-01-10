@@ -30,7 +30,7 @@ const Signin =()=>{
         }
         else
         {
-            fetch('/signin',{
+            fetch('/api/signin',{
                 method:"post",
                 headers:{
                     "Content-Type":"application/json"   

@@ -26,7 +26,7 @@ const transporter = nodemailer.createTransport(sendgripTransport({
     }
 }))
 
-router.post('/signup',(req,res)=>{
+router.post('/api/signup',(req,res)=>{
     const {name,email,password,profilePic}=req.body
     if(!name || !email || !password){
         return res.status(422).json({error:"fill all field"})
@@ -62,7 +62,7 @@ router.post('/signup',(req,res)=>{
     })
 })
 
-router.post('/signin',(req,res)=>{
+router.post('/api/signin',(req,res)=>{
     const {email,password}=req.body
     if(!email || !password){
         return res.status(422).json({error:"Fill mandatory fields "})
@@ -87,7 +87,7 @@ router.post('/signin',(req,res)=>{
 })
 
 
-router.post('/reset-password', (req,res)=>{
+router.post('/api/reset-password', (req,res)=>{
      crypto.randomBytes(32,(err,buffer)=>{
          if(err){
              console.log(err)
@@ -126,7 +126,7 @@ router.post('/reset-password', (req,res)=>{
 })
 
 
-router.post('/new-password',(req,res)=>{
+router.post('/api/new-password',(req,res)=>{
     const newPassword = req.body.password
     const sentToken = req.body.token
     console.log(sentToken)

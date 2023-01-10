@@ -28,7 +28,7 @@ const ResetPassword =()=>{
         }
         else
         {
-            fetch('/reset-password',{
+            fetch('/api/reset-password',{
                 method:"post",
                 headers:{
                     "Content-Type":"application/json"   

@@ -21,7 +21,7 @@ const NavigationBar =()=>{
         setSearch(query)
         // console.log(search)
         if(query!=""){
-            fetch('/search-users',{
+            fetch('/api/search-users',{
               method:"post",
               headers:{
                 "Content-Type":"application/json"
