@@ -7,31 +7,18 @@ const User=mongoose.model("User")
 const bcrypt=require('bcryptjs')
 const jwt=require('jsonwebtoken')
 const requireLogin=require("../middleware/requireLogin")
-const nodemailer=require('nodemailer')
-const sendgripTransport=require('nodemailer-sendgrid-transport')
 const SECRET=process.env.SECRET_KEY
-const SENDGRID_API=process.env.SENDGRID_API
-const HOST=process.env.HOST
-const EMAIL=process.env.EMAIL
+const BASE_URL=process.env.BASE_URL
+const SendEmail = require("../utils/SendEmail");
 
 
 
-
-
-const transporter = nodemailer.createTransport(sendgripTransport({
-    host: 'smtp.sendgrid.net',
-    port: 587,
-    auth:{
-        api_key:SENDGRID_API
-    }
-}))
-
-router.post('/api/signup',(req,res)=>{
+router.post('/api/signup', async (req,res)=>{
     const {name,email,password,profilePic}=req.body
     if(!name || !email || !password){
         return res.status(422).json({error:"fill all field"})
     }
-    User.findOne({email})
+    await User.findOne({email})
     .then((savedUser)=>{
         if(savedUser){
             return res.status(422).json({error:"User already exists"})
@@ -43,15 +30,8 @@ router.post('/api/signup',(req,res)=>{
             }) 
             user.save()
             .then((user)=>{
-                //
-                console.log(user)
-                transporter.sendMail({
-                    to:user.email,
-                    from:"sanskar0703@gmail.com",
-                    subject:"signup success",
-                    html:"<h1>Welcome to Insta-Gram-App</h1><h5>This is an auto generated mail please do not reply</h5>"
-                })
-                //
+                const msg=` <h1>Welcome to Insta-Gram-App</h1><h5>This is an auto generated mail please do not reply</h5>`;
+                SendEmail(user.email,"Signup Success",msg);
                 res.json({message:"saved user successfully"})
             })
             .catch((err)=>console.log(err))
@@ -87,8 +67,8 @@ router.post('/api/signin',(req,res)=>{
 })
 
 
-router.post('/api/reset-password', (req,res)=>{
-     crypto.randomBytes(32,(err,buffer)=>{
+router.post('/api/reset-password', async (req,res)=>{
+    await crypto.randomBytes(32,(err,buffer)=>{
          if(err){
              console.log(err)
          }
@@ -100,24 +80,12 @@ router.post('/api/reset-password', (req,res)=>{
              }
              user.resetToken = token
              user.expireToken = Date.now() + 3600000 //user should reset within 1 hour
-             user.save().then((result)=>{
-                console.log(result);
-                 transporter.sendMail({
-                     to:user.email,
-                     from:"sanskar0703@gmail.com",
-                     subject:"password reset",
-                     html:`
-                     <h2>You requested for password reset</h2>
-                     <h3>click in this <a href="${HOST}/reset/${token}">link</a> to reset password</h3>
-                     `
-                 },function(error, info){
-                    if (error) {
-                      console.log(error);
-                    } else {
-                        console.log('Email sent: ' + info.message);
-                        // console.log('Email info: ' + info);
-                    }
-                  })
+             user.save().then( (result)=>{
+                    const msg=`
+                          <h2>You requested for password reset</h2>
+                          <h3>click in this <a href="${BASE_URL}/reset/${token}">link</a> to reset password</h3>
+                          `
+                  SendEmail(user.email,"Password Reset",msg);
                   res.json({message:"check your email"})
              })
 
